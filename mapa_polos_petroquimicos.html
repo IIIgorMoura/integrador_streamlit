@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_9b14198bf1eb51e5b47c2ab23298bdbf {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+
+            <style>html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            </style>
+
+            <style>#map {
+                position:absolute;
+                top:0;
+                bottom:0;
+                right:0;
+                left:0;
+                }
+            </style>
+
+            <script>
+                L_NO_TOUCH = false;
+                L_DISABLE_3D = false;
+            </script>
+
+        
+</head>
+<body>
+    
+    
+            <div class="folium-map" id="map_9b14198bf1eb51e5b47c2ab23298bdbf" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_9b14198bf1eb51e5b47c2ab23298bdbf = L.map(
+                "map_9b14198bf1eb51e5b47c2ab23298bdbf",
+                {
+                    center: [-23.65, -46.55],
+                    crs: L.CRS.EPSG3857,
+                    ...{
+  "zoom": 9,
+  "zoomControl": true,
+  "preferCanvas": false,
+}
+
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_2e47b36e3338eeabd6d13237f7cf9801 = L.tileLayer(
+                "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 19,
+  "maxNativeZoom": 19,
+  "noWrap": false,
+  "attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors",
+  "subdomains": "abc",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_2e47b36e3338eeabd6d13237f7cf9801.addTo(map_9b14198bf1eb51e5b47c2ab23298bdbf);
+        
+    
+            var marker_f3175a635cee3fa3922821cfc136d050 = L.marker(
+                [-23.8956, -46.4249],
+                {
+}
+            ).addTo(map_9b14198bf1eb51e5b47c2ab23298bdbf);
+        
+    
+        var popup_0b4af4964ed5f1a624bc13ac8369f212 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_ccc4994a204585447865db749cdbb071 = $(`<div id="html_ccc4994a204585447865db749cdbb071" style="width: 100.0%; height: 100.0%;">Cubatão</div>`)[0];
+                popup_0b4af4964ed5f1a624bc13ac8369f212.setContent(html_ccc4994a204585447865db749cdbb071);
+            
+        
+
+        marker_f3175a635cee3fa3922821cfc136d050.bindPopup(popup_0b4af4964ed5f1a624bc13ac8369f212)
+        ;
+
+        
+    
+    
+            marker_f3175a635cee3fa3922821cfc136d050.bindTooltip(
+                `<div>
+                     Cubatão
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_22176d0913ba7d9451a454bc98475229 = L.marker(
+                [-23.6675, -46.4612],
+                {
+}
+            ).addTo(map_9b14198bf1eb51e5b47c2ab23298bdbf);
+        
+    
+        var popup_4f700f8d20798130f0d378951c437b01 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_6694aa9631a5d829d56bc72002b3ca3e = $(`<div id="html_6694aa9631a5d829d56bc72002b3ca3e" style="width: 100.0%; height: 100.0%;">Mauá</div>`)[0];
+                popup_4f700f8d20798130f0d378951c437b01.setContent(html_6694aa9631a5d829d56bc72002b3ca3e);
+            
+        
+
+        marker_22176d0913ba7d9451a454bc98475229.bindPopup(popup_4f700f8d20798130f0d378951c437b01)
+        ;
+
+        
+    
+    
+            marker_22176d0913ba7d9451a454bc98475229.bindTooltip(
+                `<div>
+                     Mauá
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_8ff98992faa6cd30267438f8a03cbd22 = L.marker(
+                [-23.6639, -46.5386],
+                {
+}
+            ).addTo(map_9b14198bf1eb51e5b47c2ab23298bdbf);
+        
+    
+        var popup_045a9daf4f76ae9d2468d88bc974c34c = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_2edab1f44c4054141f5768df460670c7 = $(`<div id="html_2edab1f44c4054141f5768df460670c7" style="width: 100.0%; height: 100.0%;">Santo André</div>`)[0];
+                popup_045a9daf4f76ae9d2468d88bc974c34c.setContent(html_2edab1f44c4054141f5768df460670c7);
+            
+        
+
+        marker_8ff98992faa6cd30267438f8a03cbd22.bindPopup(popup_045a9daf4f76ae9d2468d88bc974c34c)
+        ;
+
+        
+    
+    
+            marker_8ff98992faa6cd30267438f8a03cbd22.bindTooltip(
+                `<div>
+                     Santo André
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_303bb4377777fb5fa13252edf4d0d204 = L.marker(
+                [-23.6915, -46.5658],
+                {
+}
+            ).addTo(map_9b14198bf1eb51e5b47c2ab23298bdbf);
+        
+    
+        var popup_bedeea32c6b7a7b06ce9cfe1a06508b9 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_6fd4bcaa8eaca848912200596fcaa54d = $(`<div id="html_6fd4bcaa8eaca848912200596fcaa54d" style="width: 100.0%; height: 100.0%;">São Bernardo do Campo</div>`)[0];
+                popup_bedeea32c6b7a7b06ce9cfe1a06508b9.setContent(html_6fd4bcaa8eaca848912200596fcaa54d);
+            
+        
+
+        marker_303bb4377777fb5fa13252edf4d0d204.bindPopup(popup_bedeea32c6b7a7b06ce9cfe1a06508b9)
+        ;
+
+        
+    
+    
+            marker_303bb4377777fb5fa13252edf4d0d204.bindTooltip(
+                `<div>
+                     São Bernardo do Campo
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_c4fa1845496084a7edc0fb685cc8403f = L.marker(
+                [-23.6829, -46.6197],
+                {
+}
+            ).addTo(map_9b14198bf1eb51e5b47c2ab23298bdbf);
+        
+    
+        var popup_c080b06abb33f875ccbfe7c50f032e57 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_1ed353ec1a5df0fc72eea538a61c8efd = $(`<div id="html_1ed353ec1a5df0fc72eea538a61c8efd" style="width: 100.0%; height: 100.0%;">Diadema</div>`)[0];
+                popup_c080b06abb33f875ccbfe7c50f032e57.setContent(html_1ed353ec1a5df0fc72eea538a61c8efd);
+            
+        
+
+        marker_c4fa1845496084a7edc0fb685cc8403f.bindPopup(popup_c080b06abb33f875ccbfe7c50f032e57)
+        ;
+
+        
+    
+    
+            marker_c4fa1845496084a7edc0fb685cc8403f.bindTooltip(
+                `<div>
+                     Diadema
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_27310aead4ac3cf065374d3eb7768056 = L.marker(
+                [-22.7472, -47.1564],
+                {
+}
+            ).addTo(map_9b14198bf1eb51e5b47c2ab23298bdbf);
+        
+    
+        var popup_a672a239cee2797ec8008b6c414e588b = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_402893d5c41afea2fb2d9ddd7caba69b = $(`<div id="html_402893d5c41afea2fb2d9ddd7caba69b" style="width: 100.0%; height: 100.0%;">Paulínia</div>`)[0];
+                popup_a672a239cee2797ec8008b6c414e588b.setContent(html_402893d5c41afea2fb2d9ddd7caba69b);
+            
+        
+
+        marker_27310aead4ac3cf065374d3eb7768056.bindPopup(popup_a672a239cee2797ec8008b6c414e588b)
+        ;
+
+        
+    
+    
+            marker_27310aead4ac3cf065374d3eb7768056.bindTooltip(
+                `<div>
+                     Paulínia
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+</script>
+</html>
