@@ -113,6 +113,67 @@ def Home():
 
 
 
+    # GRÁFICO: Poluição no Período
+    cores_cidades = ["#3355FF", "#FF3388", "#A033FF", '#33FF92', "#EBFF33"]
+
+    # Lista das cidades que queremos plotar
+    cidades_interesse = [
+        'Guarulhos - Pimenta',
+        'Osasco',
+        'Congonhas',  # Corrigi o nome aqui (faltava a vírgula)
+        'Cerqueira César',
+        'Marg. Tietê - Ponte'
+    ]
+
+    # Definir poluentes
+    poluentes = ['AT-MP10', 'AT-SO2']
+
+
+    # Iterar sobre os poluentes
+    for poluente in poluentes:
+        df = pd.read_excel('./DBs/df_poluicao_regiao_filtrado.xlsx', sheet_name=poluente)
+        df_filtrado = df[df['Local de Amostragem'].isin(cidades_interesse)]
+
+        # Gráfico Plotly
+        fig = go.Figure()
+
+        # Adicionar cada cidade como uma linha no gráfico
+        for i, cidade in enumerate(cidades_interesse):
+            df_cidade = df_filtrado[df_filtrado['Local de Amostragem'] == cidade]
+
+            if not df_cidade.empty:
+                valores = df_cidade[meses].values.flatten()
+                fig.add_trace(go.Scatter(
+                    x=meses, 
+                    y=valores,
+                    mode='lines+markers', 
+                    name=cidade, 
+                    line=dict(color=cores_cidades[i], width=2),
+                    marker=dict(size=6)
+                ))
+
+        # Ajustes no gráfico
+        fig.update_layout(
+            title=f'Evolução do Poluente em 2024: {poluente}',
+            xaxis_title='Meses',
+            yaxis_title='Nível de Poluição',
+            xaxis=dict(tickmode='array', tickvals=meses, tickangle=45),
+            template='plotly_white',
+            legend_title="Cidades",
+            height=600
+        )
+
+        # Exibir no Streamlit
+        st.plotly_chart(fig, use_container_width=True)
+
+
+
+
+
+
+
+
+
     # st.write('gráfico: Casos de SRAG proporcionalmente à POP.Região (create in TRATAMENTO)')
     # GRÁFICO: Proporção de Casos SRAG por 100.000 habitantes
 
@@ -217,7 +278,7 @@ def Home():
         hovermode='x unified',
         template='plotly_white',
         xaxis_tickformat='%b\n%Y',
-        legend=dict(x=0.01, y=0.99)
+  
     )
 
     st.plotly_chart(fig_previsao, use_container_width=True)
