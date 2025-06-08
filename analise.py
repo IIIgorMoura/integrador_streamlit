@@ -26,19 +26,29 @@ st.sidebar.header("Selecione os Filtros")
 
 def Home():
     st.title('🏭 Impacto das Indústrias Químicas na Saúde e Qualidade de Vida da População')
+
+    total_srag = df_prop_23['QUANTIDADE DE CASOS'].sum() + df_prop_24['QUANTIDADE DE CASOS'].sum()
+    obitos_srag = 8913 + 8009
+
+    st.write(' ')
+    st.write(' ')
+
+    total1, total2, total3 = st.columns(3)
+    with total1:
+        st.metric('Total de Casos SRAG desde 2023 em SP', value=int(total_srag))
+    with total2:
+        st.metric('Total de Óbitos por SRAG desde 2023 em SP', value=int(obitos_srag))
+    with total3:
+        st.metric('Principal Poluente Responsável', value=str('MP2.5'))
+
+
     
     st.markdown('- - -')
 
     st.sidebar.write('filtro: POLUENTE')
     st.sidebar.write('filtro: PERÍODO')
 
-    st.write('NOTAS: Falar da inconsistência dos dados, especialmente do MP2.5 que é o mais danoso pra saúde (Gráfico POLUENTES)')
-    st.write('NOTAS: ? Falar da geografia influenciar? (Santos é mt poluido mas a proximidade ao Mar e ao vento, move rapidamente os poluentes para outras regiões)')
-
-    st.write('gráfico: limites aceitaveis de (bom, moderado, ruim, perigo) (OBJ: mostrar em COLs EMPILHADAS os niveis)')
-
     # GRÁFICO: Poluição MÉDIA por REGIÃO
-    st.write('gráfico: poluição por região (OBJ: Mostrar que regiões como Cubatão são mais poluidas (ajustar cor pelo valor (? possivel?)))')
     poluentes = ['BS-MP10', 'BS-MP2.5', 'BS-NO2', 'BS-SO2',
              'AT-MP10', 'AT-MP2.5', 'AT-NO2', 'AT-SO2']
 
@@ -120,10 +130,8 @@ def Home():
         'Santos - Ponta da Praia',
         'Cubatão - Vale do Mogi',
         'Cubatão - V. Parisi',
-        'Guarulhos - Pimentas',
         'Osasco',
         'Congonhas',
-        'Cerqueira César',
         'Marg. Tietê - Ponte'
     ]
 
@@ -132,41 +140,50 @@ def Home():
             'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro',
             'Novembro', 'Dezembro']
 
-    # Ler os dados de MP10 para Baixada Santista e Alto Tietê
-    df_baixada_santista = pd.read_excel('./DBs/df_poluicao_regiao_filtrado.xlsx', sheet_name='BS-MP10')
-    df_alto_tiete = pd.read_excel('./DBs/df_poluicao_regiao_filtrado.xlsx', sheet_name='AT-MP10')
 
-    # Concatenar ambos os dataframes
-    df_total = pd.concat([df_baixada_santista, df_alto_tiete])
+        # Função para ler e filtrar os dados de cada poluente
+    def ler_dados_poluente(poluente, regioes):
+        # Ler os dados do poluente para as regiões
+        df_baixada_santista = pd.read_excel('./DBs/df_poluicao_regiao_filtrado.xlsx', sheet_name=f'BS-{poluente}')
+        df_alto_tiete = pd.read_excel('./DBs/df_poluicao_regiao_filtrado.xlsx', sheet_name=f'AT-{poluente}')
+        
+        # Concatenar ambos os dataframes
+        df_total = pd.concat([df_baixada_santista, df_alto_tiete])
+        
+        # Filtrar pelas cidades de interesse
+        df_filtrado = df_total[df_total['Local de Amostragem'].isin(cidades_interesse)]
+        
+        return df_filtrado
 
-    # Filtrar pelas cidades de interesse
-    df_filtrado = df_total[df_total['Local de Amostragem'].isin(cidades_interesse)]
+    # Ler os dados de MP10 e SO2
+    df_mp10 = ler_dados_poluente('MP10', ['BS', 'AT'])
+    df_so2 = ler_dados_poluente('SO2', ['BS', 'AT'])
 
     # Configurar cores para as cidades
     cores_cidades = ["#3355FF", "#FF3388", "#A033FF", '#33FF92', "#EBFF33", "#FF5733", "#6A5ACD", "#FF8C00"]
 
-    # Criar o gráfico de linha para MP10
-    fig = go.Figure()
-
-    # Adicionar cada cidade como uma linha no gráfico
-    for i, cidade in enumerate(cidades_interesse):
-        df_cidade = df_filtrado[df_filtrado['Local de Amostragem'] == cidade]
-        
-        if not df_cidade.empty:
-            valores = df_cidade[meses].values.flatten()
+    # Função para adicionar as linhas de cada cidade ao gráfico
+    def adicionar_linhas(df_poluente, nome_poluente, cor, fig):
+        for i, cidade in enumerate(cidades_interesse):
+            df_cidade = df_poluente[df_poluente['Local de Amostragem'] == cidade]
             
-            # Adicionar a linha correspondente a cada cidade
-            fig.add_trace(go.Scatter(
-                x=meses,
-                y=valores,
-                mode='lines+markers',
-                name=cidade,
-                line=dict(color=cores_cidades[i], width=2),
-                marker=dict(size=6)
-            ))
+            if not df_cidade.empty:
+                valores = df_cidade[meses].values.flatten()
+                
+                # Adicionar a linha correspondente a cada cidade
+                fig.add_trace(go.Scatter(
+                    x=meses,
+                    y=valores,
+                    mode='lines+markers',
+                    name=f"{cidade} - {nome_poluente}",
+                    line=dict(color=cor[i], width=2),
+                    marker=dict(size=6)
+                ))
 
-    # Ajustes no gráfico
-    fig.update_layout(
+    # Criar o gráfico para MP10
+    fig_mp10 = go.Figure()
+    adicionar_linhas(df_mp10, 'MP10', cores_cidades, fig_mp10)
+    fig_mp10.update_layout(
         title='📊 Evolução do Poluente MP10 nas Cidades ao Longo de 2024',
         xaxis_title='Meses',
         yaxis_title='Nível de Poluição (MP10)',
@@ -176,8 +193,22 @@ def Home():
         height=600
     )
 
-    # Exibir o gráfico no Streamlit
-    st.plotly_chart(fig, use_container_width=True)
+    # Criar o gráfico para SO2
+    fig_so2 = go.Figure()
+    adicionar_linhas(df_so2, 'SO2', cores_cidades, fig_so2)
+    fig_so2.update_layout(
+        title='📊 Evolução do Poluente SO2 nas Cidades ao Longo de 2024',
+        xaxis_title='Meses',
+        yaxis_title='Nível de Poluição (SO2)',
+        xaxis=dict(tickmode='array', tickvals=meses, tickangle=-60),
+        template='plotly_white',
+        legend_title="Cidades",
+        height=600
+    )
+
+    # Exibir os gráficos no Streamlit
+    st.plotly_chart(fig_mp10, use_container_width=True)
+    st.plotly_chart(fig_so2, use_container_width=True)
 
 
 
@@ -187,7 +218,7 @@ def Home():
 
 
 
-    # st.write('gráfico: Casos de SRAG proporcionalmente à POP.Região (create in TRATAMENTO)')
+
     # GRÁFICO: Proporção de Casos SRAG por 100.000 habitantes
 
     df_23 = df_prop_23_sorted.copy()
@@ -286,7 +317,7 @@ def Home():
 
     fig_previsao.update_layout(
         title='📉 Casos Semanais de SRAG em SP - Previsão com Machine Learning',
-        xaxis_title='Semana',
+        xaxis_title='Período',
         yaxis_title='Número de Casos',
         hovermode='x unified',
         template='plotly_white',
