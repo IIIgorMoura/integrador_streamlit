@@ -127,12 +127,14 @@ def Home():
 
     # GRÁFICO: Poluente no período por Cidade
     cidades_interesse = [
-        'Santos - Ponta da Praia',
+        'Cubatão - Centro',
         'Cubatão - Vale do Mogi',
         'Cubatão - V. Parisi',
         'Osasco',
         'Congonhas',
-        'Marg. Tietê - Ponte'
+        'Marg. Tietê - Ponte',
+        'Itaquera',
+        'Santo Amaro'
     ]
 
     # Definir meses
@@ -157,7 +159,7 @@ def Home():
 
     # Ler os dados de MP10 e SO2
     df_mp10 = ler_dados_poluente('MP10', ['BS', 'AT'])
-    df_so2 = ler_dados_poluente('SO2', ['BS', 'AT'])
+    df_mp2 = ler_dados_poluente('MP2.5', ['BS', 'AT'])
 
     # Configurar cores para as cidades
     cores_cidades = ["#3355FF", "#FF3388", "#A033FF", '#33FF92', "#EBFF33", "#FF5733", "#6A5ACD", "#FF8C00"]
@@ -195,11 +197,11 @@ def Home():
 
     # Criar o gráfico para SO2
     fig_so2 = go.Figure()
-    adicionar_linhas(df_so2, 'SO2', cores_cidades, fig_so2)
+    adicionar_linhas(df_mp2, 'MP2.5', cores_cidades, fig_so2)
     fig_so2.update_layout(
-        title='📊 Evolução do Poluente SO2 nas Cidades ao Longo de 2024',
+        title='📊 Evolução do Poluente MP2.5 nas Cidades ao Longo de 2024',
         xaxis_title='Meses',
-        yaxis_title='Nível de Poluição (SO2)',
+        yaxis_title='Nível de Poluição (MP2.5)',
         xaxis=dict(tickmode='array', tickvals=meses, tickangle=-60),
         template='plotly_white',
         legend_title="Cidades",
