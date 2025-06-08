@@ -25,12 +25,15 @@ st.sidebar.header("Selecione os Filtros")
 
 
 def Home():
-    st.title('👍 Impacto das Indústrias Químicas na Saúde e Qualidade de Vida da População')
+    st.title('🏭 Impacto das Indústrias Químicas na Saúde e Qualidade de Vida da População')
     
     st.markdown('- - -')
 
     st.sidebar.write('filtro: POLUENTE')
     st.sidebar.write('filtro: PERÍODO')
+
+    st.write('NOTAS: Falar da inconsistência dos dados, especialmente do MP2.5 que é o mais danoso pra saúde (Gráfico POLUENTES)')
+    st.write('NOTAS: ? Falar da geografia influenciar? (Santos é mt poluido mas a proximidade ao Mar e ao vento, move rapidamente os poluentes para outras regiões)')
 
     st.write('gráfico: limites aceitaveis de (bom, moderado, ruim, perigo) (OBJ: mostrar em COLs EMPILHADAS os niveis)')
 
@@ -112,59 +115,69 @@ def Home():
 
 
 
-
-    # GRÁFICO: Poluição no Período
-    cores_cidades = ["#3355FF", "#FF3388", "#A033FF", '#33FF92', "#EBFF33"]
-
-    # Lista das cidades que queremos plotar
+    # GRÁFICO: Poluente no período por Cidade
     cidades_interesse = [
-        'Guarulhos - Pimenta',
+        'Santos - Ponta da Praia',
+        'Cubatão - Vale do Mogi',
+        'Cubatão - V. Parisi',
+        'Guarulhos - Pimentas',
         'Osasco',
-        'Congonhas',  # Corrigi o nome aqui (faltava a vírgula)
+        'Congonhas',
         'Cerqueira César',
         'Marg. Tietê - Ponte'
     ]
 
-    # Definir poluentes
-    poluentes = ['AT-MP10', 'AT-SO2']
+    # Definir meses
+    meses = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio',
+            'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro',
+            'Novembro', 'Dezembro']
 
+    # Ler os dados de MP10 para Baixada Santista e Alto Tietê
+    df_baixada_santista = pd.read_excel('./DBs/df_poluicao_regiao_filtrado.xlsx', sheet_name='BS-MP10')
+    df_alto_tiete = pd.read_excel('./DBs/df_poluicao_regiao_filtrado.xlsx', sheet_name='AT-MP10')
 
-    # Iterar sobre os poluentes
-    for poluente in poluentes:
-        df = pd.read_excel('./DBs/df_poluicao_regiao_filtrado.xlsx', sheet_name=poluente)
-        df_filtrado = df[df['Local de Amostragem'].isin(cidades_interesse)]
+    # Concatenar ambos os dataframes
+    df_total = pd.concat([df_baixada_santista, df_alto_tiete])
 
-        # Gráfico Plotly
-        fig = go.Figure()
+    # Filtrar pelas cidades de interesse
+    df_filtrado = df_total[df_total['Local de Amostragem'].isin(cidades_interesse)]
 
-        # Adicionar cada cidade como uma linha no gráfico
-        for i, cidade in enumerate(cidades_interesse):
-            df_cidade = df_filtrado[df_filtrado['Local de Amostragem'] == cidade]
+    # Configurar cores para as cidades
+    cores_cidades = ["#3355FF", "#FF3388", "#A033FF", '#33FF92', "#EBFF33", "#FF5733", "#6A5ACD", "#FF8C00"]
 
-            if not df_cidade.empty:
-                valores = df_cidade[meses].values.flatten()
-                fig.add_trace(go.Scatter(
-                    x=meses, 
-                    y=valores,
-                    mode='lines+markers', 
-                    name=cidade, 
-                    line=dict(color=cores_cidades[i], width=2),
-                    marker=dict(size=6)
-                ))
+    # Criar o gráfico de linha para MP10
+    fig = go.Figure()
 
-        # Ajustes no gráfico
-        fig.update_layout(
-            title=f'Evolução do Poluente em 2024: {poluente}',
-            xaxis_title='Meses',
-            yaxis_title='Nível de Poluição',
-            xaxis=dict(tickmode='array', tickvals=meses, tickangle=45),
-            template='plotly_white',
-            legend_title="Cidades",
-            height=600
-        )
+    # Adicionar cada cidade como uma linha no gráfico
+    for i, cidade in enumerate(cidades_interesse):
+        df_cidade = df_filtrado[df_filtrado['Local de Amostragem'] == cidade]
+        
+        if not df_cidade.empty:
+            valores = df_cidade[meses].values.flatten()
+            
+            # Adicionar a linha correspondente a cada cidade
+            fig.add_trace(go.Scatter(
+                x=meses,
+                y=valores,
+                mode='lines+markers',
+                name=cidade,
+                line=dict(color=cores_cidades[i], width=2),
+                marker=dict(size=6)
+            ))
 
-        # Exibir no Streamlit
-        st.plotly_chart(fig, use_container_width=True)
+    # Ajustes no gráfico
+    fig.update_layout(
+        title='📊 Evolução do Poluente MP10 nas Cidades ao Longo de 2024',
+        xaxis_title='Meses',
+        yaxis_title='Nível de Poluição (MP10)',
+        xaxis=dict(tickmode='array', tickvals=meses, tickangle=-60),
+        template='plotly_white',
+        legend_title="Cidades",
+        height=600
+    )
+
+    # Exibir o gráfico no Streamlit
+    st.plotly_chart(fig, use_container_width=True)
 
 
 
@@ -195,7 +208,7 @@ def Home():
         y='Proporcao por 100 mil',
         color='Ano',
         barmode='group',
-        title='Proporção por 100 mil habitantes - Comparativo 2023 vs 2024'
+        title='🏥 Casos de SRAG por cidade a cada 100.000 habitantes'
     )
 
     fig_prop_anos.update_layout(
@@ -272,7 +285,7 @@ def Home():
     ))
 
     fig_previsao.update_layout(
-        title='📉 Casos Semanais de SRAG em SP - Histórico vs Previsão (ARIMA)',
+        title='📉 Casos Semanais de SRAG em SP - Previsão com Machine Learning',
         xaxis_title='Semana',
         yaxis_title='Número de Casos',
         hovermode='x unified',
